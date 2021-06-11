@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         深渊凝视着你 - 生成总览
 // @namespace    dwscdv3
-// @version      0.1.0
+// @version      0.1.1
 // @author       Dwscdv3
 // @match        *://note.one.rbq.today/xp/*
 // @match        *://starinitial.github.io/xpcheck/xp/*
@@ -25,9 +25,9 @@
                 observer.disconnect();
                 keywords = [...$('#story').querySelectorAll('b')].filter(el => el.textContent.includes('"'));
                 $('#story').style.height = '';
-                printTable('人类级', 0, 24);
-                printTable('猛兽级', 24, 22);
-                printTable('异形级', 46, 20);
+                printTable('人类级', 0, 23);
+                printTable('猛兽级', 23, 22);
+                printTable('异形级', 45, 20);
                 break;
             }
         }
@@ -58,7 +58,7 @@
             createElement('div', {
                 styles: {
                     display: 'flex',
-                    width: '600px',
+                    maxWidth: '600px',
                     margin: '10px',
                     flexWrap: 'wrap',
                 },
