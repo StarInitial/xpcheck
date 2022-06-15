@@ -3,7 +3,7 @@
 ![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=StarInitial&show_icons=true)
 
 
-**为什么会突然火起来啊？明明ink我才刚刚学了两天！！！给几个朋友稍微玩一下的！！！**
+因为这个小测试被朋友称为大佬了，笑死
 
 [测试地址](https://starinitial.github.io/xpcheck/xp)
 
