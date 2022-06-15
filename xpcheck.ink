@@ -1,3 +1,4 @@
+# author: Star
 //深渊凝视着你
 VAR point = 0
 ->CHECK_START
