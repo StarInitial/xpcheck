@@ -1,57 +1,91 @@
-﻿<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh">
 <head>
-    <meta charset="utf-8">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <title>深渊凝视着你</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="style.css">
-
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <script src="inky-list.js"></script>
 </head>
-
 <body>
-
-    <div class="outerContainer">
-        <h3 class="written-in-ink"><a href="https://www.inklestudios.com/ink">WRITTEN IN INK</a></h3>
-
-        <div id="controls" class="buttons">
-          <a id="rewind" title="Restart story from beginning">restart</a>
-          <a id="save" title="Save progress">save</a>
-          <a id="reload" title="Reload from save point">load</a>
-          <a id="theme-switch" title="Switch theme">theme</a>
-        </div>
-
-        <div id="story" class="container">
-            <div class="header">
-                <h1>深渊凝视着你</h1>
-                <h2 class="byline">by Star</h2>
-            </div>
-        </div>
-		
-		<div id="gitalk-container" class="container"></div>
+<div class="card">
+    <div class="card-header">
+        <h1>深渊凝视着你</h1>
+        <h4>测试列表</h4>
     </div>
-	
-	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script src="ink.js"></script>
-    <script src="Untitled.js"></script>
-    <script src="main.js"></script>
-    <script src="summary.js"></script>
-	
-	<script>
-		var gitalk = new Gitalk({
-		  clientID: '2c454f6a4439d8fdc27e',
-		  clientSecret: '33b652e7cedde1146ba0073218808118ecaf0cbc',
-		  repo: 'xpcheck',
-		  owner: 'StarInitial',
-		  admin: ['StarInitial'],
-		  id: location.pathname,      // Ensure uniqueness and length less than 50
-		  distractionFreeMode: true  // Facebook-like distraction free mode
-		})
-
-		gitalk.render('gitalk-container')
-	</script>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>测试</th>
+                    <th>最后更新日期</th>
+                    <th>内容作者</th>
+                    <th>程序作者</th>
+                    <th>状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="js/Chart.js"></script>
+
+<script>
+    let table = '';
+    for(let i = 0 ; i < InkyList["inky-text-list"].length; i++) {
+        table += '<tr><td>'+InkyList["inky-text-list"][i]["id"]+'</td>' +
+            '<td><a href="'+InkyList["inky-text-list"][i]["url"]+'">'+InkyList["inky-text-list"][i]["name"]+'</a></td>\n' +
+            '<td>'+InkyList["inky-text-list"][i]["update"]+'</td>\n';
+        let authorSize = 0;
+        table += "<td>";
+        for(let j = 0 ; j < InkyList["inky-text-list"][i]["author"].length; j++) {
+            authorSize ++;
+            let url = InkyList["inky-text-list"][i]["author"][j]["url"];
+            if (url === null || url === undefined) {
+                table += '<span class="label label-info">' + InkyList["inky-text-list"][i]["author"][j]["name"] +"</span>";
+            }else {
+                table += '<span class="label label-info"><a href="'+url+'" style="color: white" >' + InkyList["inky-text-list"][i]["author"][j]["name"] +"</a></span>";
+            }
+        }
+
+        if (authorSize === 0) {
+            table += '<span class="label label-dark">未知</span></td>';
+        }
+        table += '</td><td>';
+        authorSize = 0;
+        for(let j = 0 ; j < InkyList["inky-text-list"][i]["program-author"].length; j++) {
+            authorSize ++;
+            let url = InkyList["inky-text-list"][i]["program-author"][j]["url"];
+            if (url === null || url === undefined) {
+                table += '<span class="label label-info">' + InkyList["inky-text-list"][i]["program-author"][j]["name"] +"</span>";
+            }else {
+                table += '<span class="label label-info"><a href="'+url+'" style="color: white" >' + InkyList["inky-text-list"][i]["program-author"][j]["name"] +"</a></span>";
+            }
+        }
+        if (authorSize === 0) {
+            table += '<span class="label label-dark">未知</span></td>';
+        }
+        table += '</td>';
+
+        console.log(table);
+
+        if (InkyList["inky-text-list"][i]["status"] === "OK")
+            table += '<td><span class="label label-success">正常</span></td></tr>';
+        else if (InkyList["inky-text-list"][i]["status"] === "DOWN")
+            table += '<td><span class="label label-danger">停止服务</span></td></tr>';
+        else
+            table += '<td><span class="label label-dark">未知</span></td></tr>';
+    }
+    $('tbody').html(table);
+</script>
 </html>
