@@ -13,7 +13,7 @@
 <div class="card">
     <div class="card-header">
         <h1>深渊凝视着你</h1>
-        <h4>测试列表</h4>
+        <h4 style="display: block">测试列表</h4>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -32,7 +32,7 @@
                 </tbody>
             </table>
         </div>
-		<p style="color: #33cabb;">* 单击测试名称跳转到测试</p>
+        <p style="color: #33cabb;">* 单击测试名称跳转到测试</p>
     </div>
 </div>
 <div id="gitalk-container" class="container"></div>
@@ -56,9 +56,9 @@
             authorSize ++;
             let url = InkyList["inky-text-list"][i]["author"][j]["url"];
             if (url === null || url === undefined) {
-                table += '<span class="label label-info">' + InkyList["inky-text-list"][i]["author"][j]["name"] +"</span>";
+                table += '<span class="label label-info">' + InkyList["inky-text-list"][i]["author"][j]["name"] +"</span>&nbsp;";
             }else {
-                table += '<span class="label label-info"><a href="'+url+'" style="color: white" >' + InkyList["inky-text-list"][i]["author"][j]["name"] +"</a></span>";
+                table += '<span class="label label-info"><a href="'+url+'" style="color: white" >' + InkyList["inky-text-list"][i]["author"][j]["name"] +"</a></span>&nbsp;";
             }
         }
 
@@ -71,9 +71,9 @@
             authorSize ++;
             let url = InkyList["inky-text-list"][i]["program-author"][j]["url"];
             if (url === null || url === undefined) {
-                table += '<span class="label label-info">' + InkyList["inky-text-list"][i]["program-author"][j]["name"] +"</span>";
+                table += '<span class="label label-info">' + InkyList["inky-text-list"][i]["program-author"][j]["name"] +"</span>&nbsp;";
             }else {
-                table += '<span class="label label-info"><a href="'+url+'" style="color: white" >' + InkyList["inky-text-list"][i]["program-author"][j]["name"] +"</a></span>";
+                table += '<span class="label label-info"><a href="'+url+'" style="color: white" >' + InkyList["inky-text-list"][i]["program-author"][j]["name"] +"</a></span>&nbsp;";
             }
         }
         if (authorSize === 0) {

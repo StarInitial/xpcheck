@@ -10,7 +10,11 @@ var InkyList = {
             "program-author":[
                 {
                     "name":"Star"
-                }
+                },
+				{
+					"name":"神楽坂 静瑶(@Dwscdv3)",
+					"url":"https://dwscdv3.com/"
+				}
             ]
         }
     ]
