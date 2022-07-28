@@ -23,9 +23,10 @@
                     <th>#</th>
                     <th>测试</th>
                     <th>最后更新日期</th>
+                    <th>预计耗时</th>
+                    <th>状态</th>
                     <th>内容作者</th>
                     <th>程序作者</th>
-                    <th>状态</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -50,6 +51,16 @@
         table += '<tr><td>'+InkyList["inky-text-list"][i]["id"]+'</td>' +
             '<td><a href="'+InkyList["inky-text-list"][i]["url"]+'">'+InkyList["inky-text-list"][i]["name"]+'</a></td>\n' +
             '<td>'+InkyList["inky-text-list"][i]["update"]+'</td>\n';
+        table += '<td><div class="progress progress-striped progress-sm">\n' +
+            '<div class="progress-bar progress-bar-info" style="width: '+InkyList["inky-text-list"][i]["time"]+'%;"></div>\n' +
+            '</div></td>';
+
+        if (InkyList["inky-text-list"][i]["status"] === "OK")
+            table += '<td><span class="label label-success">正常</span></td>';
+        else if (InkyList["inky-text-list"][i]["status"] === "DOWN")
+            table += '<td><span class="label label-danger">停止服务</span></td>';
+        else
+            table += '<td><span class="label label-dark">未知</span></td>';
         let authorSize = 0;
         table += "<td>";
         for(let j = 0 ; j < InkyList["inky-text-list"][i]["author"].length; j++) {
@@ -80,15 +91,7 @@
             table += '<span class="label label-dark">未知</span></td>';
         }
         table += '</td>';
-
-        console.log(table);
-
-        if (InkyList["inky-text-list"][i]["status"] === "OK")
-            table += '<td><span class="label label-success">正常</span></td></tr>';
-        else if (InkyList["inky-text-list"][i]["status"] === "DOWN")
-            table += '<td><span class="label label-danger">停止服务</span></td></tr>';
-        else
-            table += '<td><span class="label label-dark">未知</span></td></tr>';
+        table += "</tr>";
     }
     $('tbody').html(table);
 
