@@ -10,10 +10,15 @@
     <script src="inky-list.js"></script>
 </head>
 <body>
-<div class="card">
+<div class="card" style="min-height: 70%">
     <div class="card-header">
-        <h1>深渊凝视着你</h1>
-        <h4 style="display: block">测试列表</h4>
+        <h1>深渊凝视着你 | 测试列表</h1>
+    </div>
+    <div class="card-body">
+        <div class="form-inline">
+            <label class="sr-only" for="search-text">检索</label>
+            <input class="form-control" type="text" id="search-text" placeholder="查询测试" style="width: 100%;">
+        </div>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -33,6 +38,13 @@
                 </tbody>
             </table>
         </div>
+        <div style="margin: auto;padding:auto;width: 100%">
+            <ul class="pagination">
+                <li class="disabled"><span>«</span></li>
+                <li class="active"><span>1</span></li>
+                <li><a href="#!">»</a></li>
+            </ul>
+        </div>
         <p style="color: #33cabb;">* 单击测试名称跳转到测试</p>
     </div>
 </div>
@@ -46,54 +58,118 @@
 <script type="text/javascript" src="js/Chart.js"></script>
 
 <script>
-    let table = '';
-    for(let i = 0 ; i < InkyList["inky-text-list"].length; i++) {
-        table += '<tr><td>'+InkyList["inky-text-list"][i]["id"]+'</td>' +
-            '<td><a href="'+InkyList["inky-text-list"][i]["url"]+'">'+InkyList["inky-text-list"][i]["name"]+'</a></td>\n' +
-            '<td>'+InkyList["inky-text-list"][i]["update"]+'</td>\n';
-        table += '<td><div class="progress progress-striped progress-sm">\n' +
-            '<div class="progress-bar progress-bar-info" style="width: '+InkyList["inky-text-list"][i]["time"]+'%;"></div>\n' +
-            '</div></td>';
 
-        if (InkyList["inky-text-list"][i]["status"] === "OK")
-            table += '<td><span class="label label-success">正常</span></td>';
-        else if (InkyList["inky-text-list"][i]["status"] === "DOWN")
-            table += '<td><span class="label label-danger">停止服务</span></td>';
-        else
-            table += '<td><span class="label label-dark">未知</span></td>';
-        let authorSize = 0;
-        table += "<td>";
-        for(let j = 0 ; j < InkyList["inky-text-list"][i]["author"].length; j++) {
-            authorSize ++;
-            let url = InkyList["inky-text-list"][i]["author"][j]["url"];
-            if (url === null || url === undefined) {
-                table += '<span class="label label-info">' + InkyList["inky-text-list"][i]["author"][j]["name"] +"</span>&nbsp;";
+    var thisPage = 1;
+
+    updateTable();
+    $("#search-text").on("input propertychange",function(){
+       updateTable($("#search-text").val(),thisPage)
+    });
+
+    function updateTable(keyword,page) {
+        let table = '';
+        if (page === undefined || page === null || page === '') page = 1;
+        let maxIndex = page*10;
+        let minIndex = page*10-9;
+        let j = 0;
+        for(let i = 0 ; i < InkyList["inky-text-list"].length; i++) {
+            if (keyword !== undefined && keyword !== null && keyword !== ""){
+                keyword = keyword.replace(/(^\s*)|(\s*$)/g,"");
+                if (InkyList["inky-text-list"][i]["name"].indexOf(keyword) === -1)
+                    continue;
+            }
+            j++;
+            if (j < minIndex || j > maxIndex){
+                continue;
+            }
+
+            table += '<tr><td>'+InkyList["inky-text-list"][i]["id"]+'</td>';
+            if (InkyList["inky-text-list"][i]["status"] === "DOWN") {
+                table +='<td>'+InkyList["inky-text-list"][i]["name"]+'</td>\n';
             }else {
-                table += '<span class="label label-info"><a href="'+url+'" style="color: white" >' + InkyList["inky-text-list"][i]["author"][j]["name"] +"</a></span>&nbsp;";
+                table += '<td><a href="'+InkyList["inky-text-list"][i]["url"]+'">'+InkyList["inky-text-list"][i]["name"]+'</a></td>\n';
+            }
+            table += '<td>'+InkyList["inky-text-list"][i]["update"]+'</td>\n';
+            table += '<td><div class="progress progress-striped progress-sm">\n' +
+                '<div class="progress-bar progress-bar-info" style="width: '+InkyList["inky-text-list"][i]["time"]+'%;"></div>\n' +
+                '</div></td>';
+
+            if (InkyList["inky-text-list"][i]["status"] === "OK")
+                table += '<td><span class="label label-success">正常</span></td>';
+            else if (InkyList["inky-text-list"][i]["status"] === "DOWN")
+                table += '<td><span class="label label-danger">停止服务</span></td>';
+            else
+                table += '<td><span class="label label-dark">未知</span></td>';
+            let authorSize = 0;
+            table += "<td>";
+            let authorColorList = ['label-warning','label-danger','label-success','label-info'];
+            for(let j = 0 ; j < InkyList["inky-text-list"][i]["author"].length; j++) {
+                authorSize ++;
+                let url = InkyList["inky-text-list"][i]["author"][j]["url"];
+                let authorColor = authorColorList[InkyList["inky-text-list"][i]["author"][j]["name"].charCodeAt(0)%authorColorList.length];
+                if (url === null || url === undefined) {
+                    table += '<span class="label '+authorColor+'">' + InkyList["inky-text-list"][i]["author"][j]["name"] +"</span>&nbsp;";
+                }else {
+                    table += '<span class="label '+authorColor+'"><a href="'+url+'" style="color: white" >' + InkyList["inky-text-list"][i]["author"][j]["name"] +"</a></span>&nbsp;";
+                }
+            }
+
+            if (authorSize === 0) {
+                table += '<span class="label label-dark">未知</span></td>';
+            }
+            table += '</td><td>';
+            authorSize = 0;
+            for(let j = 0 ; j < InkyList["inky-text-list"][i]["program-author"].length; j++) {
+                authorSize ++;
+                let url = InkyList["inky-text-list"][i]["program-author"][j]["url"];
+                let authorColor = authorColorList[InkyList["inky-text-list"][i]["program-author"][j]["name"].charCodeAt(0)%authorColorList.length];
+                if (url === null || url === undefined) {
+                    table += '<span class="label '+ authorColor +'">' + InkyList["inky-text-list"][i]["program-author"][j]["name"] +"</span>&nbsp;";
+                }else {
+                    table += '<span class="label '+ authorColor +'"><a href="'+url+'" style="color: white" >' + InkyList["inky-text-list"][i]["program-author"][j]["name"] +"</a></span>&nbsp;";
+                }
+            }
+            if (authorSize === 0) {
+                table += '<span class="label label-dark">未知</span></td>';
+            }
+            table += '</td>';
+            table += "</tr>";
+        }
+        $('tbody').html(table);
+
+        let pagination;
+
+        if (page === 1){
+            pagination = '<li class="disabled"><span>«</span></li>';
+        }else {
+            pagination = '<li onclick="addPage(-1)"><span>«</span></li>';
+        }
+        for(let k = 1 ; k <= parseInt(j/10+1) ; k++){
+            if (k === page){
+                pagination += '<li class="active" onclick="changePage('+k+')"><span>'+k+'</span></li>';
+            }else {
+                pagination += '<li onclick="changePage('+k+')"><span>'+k+'</span></li>';
             }
         }
-
-        if (authorSize === 0) {
-            table += '<span class="label label-dark">未知</span></td>';
+        if (page === parseInt(j/10+1)){
+            pagination += '<li class="disabled"><span>»</span></li>';
+        }else {
+            pagination += '<li onclick="addPage(1)"><span>»</span></li>';
         }
-        table += '</td><td>';
-        authorSize = 0;
-        for(let j = 0 ; j < InkyList["inky-text-list"][i]["program-author"].length; j++) {
-            authorSize ++;
-            let url = InkyList["inky-text-list"][i]["program-author"][j]["url"];
-            if (url === null || url === undefined) {
-                table += '<span class="label label-info">' + InkyList["inky-text-list"][i]["program-author"][j]["name"] +"</span>&nbsp;";
-            }else {
-                table += '<span class="label label-info"><a href="'+url+'" style="color: white" >' + InkyList["inky-text-list"][i]["program-author"][j]["name"] +"</a></span>&nbsp;";
-            }
-        }
-        if (authorSize === 0) {
-            table += '<span class="label label-dark">未知</span></td>';
-        }
-        table += '</td>';
-        table += "</tr>";
+        $('.pagination').html(pagination);
     }
-    $('tbody').html(table);
+
+    function addPage(page) {
+        page = parseInt(page);
+        thisPage = thisPage + page;
+        updateTable($("#search-text").val(),thisPage);
+    }
+
+    function changePage(page) {
+        if (parseInt(page) < 0) return;
+        thisPage = page;
+        updateTable($("#search-text").val(),page);
+    }
 
     var gitalk = new Gitalk({
         clientID: '2c454f6a4439d8fdc27e',
@@ -103,7 +179,7 @@
         admin: ['StarInitial'],
         id: location.pathname,      // Ensure uniqueness and length less than 50
         distractionFreeMode: true  // Facebook-like distraction free mode
-    })
+    });
 
     gitalk.render('gitalk-container')
 </script>
