@@ -144,6 +144,8 @@
         <div class="container" id="btn-group" style="display: none">
             <form class="form-horizontal">
                 <div class="form-group"><button class="btn btn-primary btn-w-md" style="width: 100%" type="button" onclick="createResult()">生成结果</button></div>
+                <div class="form-group"><button class="btn btn-info btn-w-md" style="width: 100%" type="button" onclick="outputToClick()">导出结果到剪切板</button></div>
+                <div class="form-group"><button class="btn btn-pink btn-w-md" style="width: 100%" type="button" onclick="inputToPage()">从文本导入结果</button></div>
                 <div class="form-group"><button class="btn btn-default btn-w-md" style="width: 100%" type="button" onclick="clearAllChoose()">重置</button></div>
             </form>
 
@@ -153,47 +155,6 @@
             <div class="form-group"><button class="btn btn-primary btn-w-md" style="width: 100%" type="button" onclick="returnCheck()">返回自测表</button></div>
             <div class="form-group"><button class="btn btn-primary btn-w-md" style="width: 100%" type="button" onclick="createResultImage()">生成结果图片</button></div>
             <div id="result">
-                <h2 style="text-align: center">M属性自测报告</h2>
-                <div class="col-lg-6" style="height: 400px">
-                    <h4 style="text-align: center">性奴-喜好程度统计</h4>
-                    <canvas id="chart-step-1-like" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
-                </div>
-                <div class="col-lg-6" style="height: 400px">
-                    <h4 style="text-align: center">性奴-是否有经验</h4>
-                    <canvas id="chart-step-1-try" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
-                </div>
-                <div class="col-lg-6" style="height: 400px">
-                    <h4 style="text-align: center">宠物-喜好程度统计</h4>
-                    <canvas id="chart-step-2-like" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
-                </div>
-                <div class="col-lg-6" style="height: 400px">
-                    <h4 style="text-align: center">宠物-是否有经验</h4>
-                    <canvas id="chart-step-2-try" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
-                </div>
-                <div class="col-lg-6" style="height: 400px">
-                    <h4 style="text-align: center">露出-喜好程度统计</h4>
-                    <canvas id="chart-step-3-like" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
-                </div>
-                <div class="col-lg-6" style="height: 400px">
-                    <h4 style="text-align: center">露出-是否有经验</h4>
-                    <canvas id="chart-step-3-try" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
-                </div>
-                <div class="col-lg-6" style="height: 400px">
-                    <h4 style="text-align: center">心控-喜好程度统计</h4>
-                    <canvas id="chart-step-4-like" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
-                </div>
-                <div class="col-lg-6" style="height: 400px">
-                    <h4 style="text-align: center">心控-是否有经验</h4>
-                    <canvas id="chart-step-4-try" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
-                </div>
-                <div class="col-lg-6" style="height: 400px">
-                    <h4 style="text-align: center">其他-喜好程度统计</h4>
-                    <canvas id="chart-step-5-like" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
-                </div>
-                <div class="col-lg-6" style="height: 400px">
-                    <h4 style="text-align: center">其他-是否有经验</h4>
-                    <canvas id="chart-step-5-try" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
-                </div>
             </div>
         </div>
     </div>
@@ -305,6 +266,10 @@
         });
     }
 
+    function infoAlert(title,message,okBtnMsg,noBtnMsg,okBtnFun,noBtnFun){
+        alertWindows('info', title, message, okBtnMsg, noBtnMsg, okBtnFun, noBtnFun);
+    }
+
 
     function warningAlert(title,message,okBtnMsg,noBtnMsg,okBtnFun,noBtnFun){
         alertWindows('warning', title, message, okBtnMsg, noBtnMsg, okBtnFun, noBtnFun);
@@ -312,6 +277,18 @@
 
     function dangerAlert(title,message,okBtnMsg,noBtnMsg,okBtnFun,noBtnFun){
         alertWindows('danger', title, message, okBtnMsg, noBtnMsg, okBtnFun, noBtnFun);
+    }
+
+    function copyToClick(text){
+        let input = document.createElement('input');
+        document.body.appendChild(input);
+        input.setAttribute('value', text);
+        input.select();
+        document.execCommand("copy"); // 执行浏览器复制命令
+        if (document.execCommand('copy')) {
+            document.execCommand('copy');
+        }
+        document.body.removeChild(input);
     }
 
     function drawTable(table,pagination,data,page) {
@@ -582,6 +559,47 @@
         $('form').attr("style", "display:none");
         $('#btn-group').attr("style", "display:none");
         $('#result-Canvas').attr("style", "display:block");
+        $('#result').html("<h2 style=\"text-align: center\">M属性自测报告</h2>\n" +
+            "                <div class=\"col-lg-6\" style=\"height: 400px\">\n" +
+            "                    <h4 style=\"text-align: center\">性奴-喜好程度统计</h4>\n" +
+            "                    <canvas id=\"chart-step-1-like\" style=\"position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;\"></canvas>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-lg-6\" style=\"height: 400px\">\n" +
+            "                    <h4 style=\"text-align: center\">性奴-是否有经验</h4>\n" +
+            "                    <canvas id=\"chart-step-1-try\" style=\"position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;\"></canvas>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-lg-6\" style=\"height: 400px\">\n" +
+            "                    <h4 style=\"text-align: center\">宠物-喜好程度统计</h4>\n" +
+            "                    <canvas id=\"chart-step-2-like\" style=\"position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;\"></canvas>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-lg-6\" style=\"height: 400px\">\n" +
+            "                    <h4 style=\"text-align: center\">宠物-是否有经验</h4>\n" +
+            "                    <canvas id=\"chart-step-2-try\" style=\"position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;\"></canvas>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-lg-6\" style=\"height: 400px\">\n" +
+            "                    <h4 style=\"text-align: center\">露出-喜好程度统计</h4>\n" +
+            "                    <canvas id=\"chart-step-3-like\" style=\"position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;\"></canvas>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-lg-6\" style=\"height: 400px\">\n" +
+            "                    <h4 style=\"text-align: center\">露出-是否有经验</h4>\n" +
+            "                    <canvas id=\"chart-step-3-try\" style=\"position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;\"></canvas>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-lg-6\" style=\"height: 400px\">\n" +
+            "                    <h4 style=\"text-align: center\">心控-喜好程度统计</h4>\n" +
+            "                    <canvas id=\"chart-step-4-like\" style=\"position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;\"></canvas>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-lg-6\" style=\"height: 400px\">\n" +
+            "                    <h4 style=\"text-align: center\">心控-是否有经验</h4>\n" +
+            "                    <canvas id=\"chart-step-4-try\" style=\"position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;\"></canvas>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-lg-6\" style=\"height: 400px\">\n" +
+            "                    <h4 style=\"text-align: center\">其他-喜好程度统计</h4>\n" +
+            "                    <canvas id=\"chart-step-5-like\" style=\"position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;\"></canvas>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-lg-6\" style=\"height: 400px\">\n" +
+            "                    <h4 style=\"text-align: center\">其他-是否有经验</h4>\n" +
+            "                    <canvas id=\"chart-step-5-try\" style=\"position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;\"></canvas>\n" +
+            "                </div>");
         $(document).scrollTop(0);
 
         //chart-step-1-like
@@ -609,25 +627,48 @@
             });
     }
 
-    // $.confirm({
-    //     title: '#NSFW警告',
-    //     content: '该测试内可能包含',
-    //     type: 'orange',
-    //     typeAnimated: true,
-    //     buttons: {
-    //         ok: {
-    //             text: '接受',
-    //             btnClass: 'btn-warning',
-    //             action: function(){
-    //             }
-    //         },
-    //         close: {
-    //             text: '关闭测试页面',
-    //             action: function(){
-    //                 window.close();
-    //             }
-    //         }
-    //     }
-    // });
+    function outputToClick() {
+        copyToClick(JSON.stringify(UserChoose));
+        infoAlert("提示","成功将您的自测选择导出到剪切板");
+    }
+
+    function checkData(data) {
+        if (data === null || data ===undefined || typeof data !== 'object') return false;
+        for (let i = 1;i< 6 ; i++){
+            if (data[i] === null || data[i] === undefined || typeof data[i] !== 'object') return false;
+            if (data[i]["like"] === null || data[i]["like"] === undefined || typeof data[i]["like"] !== 'object') return false;
+            if (data[i]["try"] === null || data[i]["try"] === undefined || typeof data[i]["try"] !== 'object') return false;
+        }
+        return true;
+    }
+
+    function inputToPage() {
+        infoAlert(
+            "导入数据",
+            "<div class=\"form-group\"><label>请输入自测表结果数据：</label><input type=\"text\" id='input-data' class=\"name form-control\" required /><b style='color: red'>*原先页面上的数据可能会遗失，请谨慎操作</b></div>",
+            "现在导入",
+            "取消",
+            function () {
+                let inputData = $('#input-data').val();
+                if (inputData === null || inputData === undefined || inputData ==='') {
+                    dangerAlert("错误","请输入要导入的数据","好的");
+                    return false;
+                }
+                try {
+                    let choose = JSON.parse(inputData);
+                    if(!checkData(choose)){
+                        throw new Error();
+                    }
+                    UserChoose = choose;
+                    initWindow();
+                    localStorage.setItem('UserChoose',JSON.stringify(UserChoose));
+                }catch (e) {
+                    dangerAlert("错误","输入的数据无法解析，这有可能是您输入了错误的数据或者数据已经损坏。","好的");
+                    return false;
+                }
+                console.info(inputData);
+            }
+        )
+    }
 </script>
 </html>
