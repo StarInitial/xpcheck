@@ -227,7 +227,7 @@
 
     var UserChoose = {};
 
-    var needWarning = false;
+    var needWarning = true;
 
     if (localStorage.getItem("UserChoose") !== undefined && localStorage.getItem("UserChoose") !== null) {
         UserChoose = JSON.parse(localStorage.getItem("UserChoose"));
@@ -494,8 +494,8 @@
         );
     }
 
-    // if (needWarning) firstWarning();
-    // else initWindow();
+    if (needWarning) firstWarning();
+    else initWindow();
 
     function returnCheck() {
         initWindow();
@@ -598,8 +598,6 @@
         drawChart("chart-step-5-try",tryChooseNum(UserChoose[5]["try"]),"try");
 
     }
-
-    createResult();
 
     function createResultImage() {
         domtoimage.toJpeg(document.getElementById('result'), { quality: 1 ,bgcolor:"white" })
