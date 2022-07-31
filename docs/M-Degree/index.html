@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>M属性自测表</title>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/perfect-scrollbar.min.js"></script>
+    <script src="../js/jconfirm/jquery-confirm.min.js"></script>
+    <script src="../js/Chart.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../js/jconfirm/jquery-confirm.min.css">
+    <link rel="stylesheet" href="../css/style.min.css">
+    <script src="../js/dom-to-image.min.js"></script>
+</head>
+<body>
+<div class="card" style="min-height: 100%">
+    <div class="card-header">
+        <h2>M属性自测表</h2>
+    </div>
+    <div class="card-body">
+        <form action="#" method="post" style="display: none" class="guide-box" data-navigateable="true">
+            <ul class="nav-step step-dots">
+                <li class="nav-step-item active">
+                    <span>性奴</span>
+<!--                    //性玩具 刑奴-->
+                    <a class="active" data-toggle="tab" href="#step-1"></a>
+                </li>
+
+                <li class="nav-step-item">
+                    <span>宠物</span>
+                    <a data-toggle="tab" href="#step-2"></a>
+                </li>
+
+                <li class="nav-step-item">
+                    <span>露出</span>
+                    <a data-toggle="tab" href="#step-3"></a>
+                </li>
+
+                <li class="nav-step-item">
+                    <span>心控</span>
+<!--                    女装-->
+                    <a data-toggle="tab" href="#step-4"></a>
+                </li>
+
+                <li class="nav-step-item">
+                    <span>其他</span>
+                    <a data-toggle="tab" href="#step-5"></a>
+                </li>
+            </ul>
+            <!--对应内容-->
+            <div class="nav-step-content">
+                <div class="nav-step-pane hidden active" id="step-1">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>内容</th>
+                                <th>接受程度</th>
+                                <th>是否有经验</th>
+                            </tr>
+                            </thead>
+                            <tbody id="step-1-table">
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav style="text-align: center">
+                        <ul id="step-1-pagination" class="pagination"></ul>
+                    </nav>
+                </div>
+
+                <div class="nav-step-pane hidden" id="step-2">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>内容</th>
+                                <th>接受程度</th>
+                                <th>是否有经验</th>
+                            </tr>
+                            </thead>
+                            <tbody id="step-2-table">
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul id="step-2-pagination" class="pagination"></ul>
+                </div>
+
+                <div class="nav-step-pane hidden" id="step-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>内容</th>
+                                <th>接受程度</th>
+                                <th>是否有经验</th>
+                            </tr>
+                            </thead>
+                            <tbody id="step-3-table">
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul id="step-3-pagination" class="pagination"></ul>
+                </div>
+
+                <div class="nav-step-pane hidden" id="step-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>内容</th>
+                                <th>接受程度</th>
+                                <th>是否有经验</th>
+                            </tr>
+                            </thead>
+                            <tbody id="step-4-table">
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul id="step-4-pagination" class="pagination"></ul>
+                </div>
+
+                <div class="nav-step-pane hidden" id="step-5">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>内容</th>
+                                <th>接受程度</th>
+                                <th>是否有经验</th>
+                            </tr>
+                            </thead>
+                            <tbody id="step-5-table">
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul id="step-5-pagination" class="pagination"></ul>
+                </div>
+            </div>
+        </form>
+
+        <div class="container" id="btn-group" style="display: none">
+            <form class="form-horizontal">
+                <div class="form-group"><button class="btn btn-primary btn-w-md" style="width: 100%" type="button" onclick="createResult()">生成结果</button></div>
+                <div class="form-group"><button class="btn btn-default btn-w-md" style="width: 100%" type="button" onclick="clearAllChoose()">重置</button></div>
+            </form>
+
+        </div>
+
+        <div class="container" id="result-Canvas" style="display: none;">
+            <div class="form-group"><button class="btn btn-primary btn-w-md" style="width: 100%" type="button" onclick="returnCheck()">返回自测表</button></div>
+            <div class="form-group"><button class="btn btn-primary btn-w-md" style="width: 100%" type="button" onclick="createResultImage()">生成结果图片</button></div>
+            <div id="result">
+                <h2 style="text-align: center">M属性自测报告</h2>
+                <div class="col-lg-6" style="height: 400px">
+                    <h4 style="text-align: center">性奴-喜好程度统计</h4>
+                    <canvas id="chart-step-1-like" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
+                </div>
+                <div class="col-lg-6" style="height: 400px">
+                    <h4 style="text-align: center">性奴-是否有经验</h4>
+                    <canvas id="chart-step-1-try" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
+                </div>
+                <div class="col-lg-6" style="height: 400px">
+                    <h4 style="text-align: center">宠物-喜好程度统计</h4>
+                    <canvas id="chart-step-2-like" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
+                </div>
+                <div class="col-lg-6" style="height: 400px">
+                    <h4 style="text-align: center">宠物-是否有经验</h4>
+                    <canvas id="chart-step-2-try" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
+                </div>
+                <div class="col-lg-6" style="height: 400px">
+                    <h4 style="text-align: center">露出-喜好程度统计</h4>
+                    <canvas id="chart-step-3-like" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
+                </div>
+                <div class="col-lg-6" style="height: 400px">
+                    <h4 style="text-align: center">露出-是否有经验</h4>
+                    <canvas id="chart-step-3-try" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
+                </div>
+                <div class="col-lg-6" style="height: 400px">
+                    <h4 style="text-align: center">心控-喜好程度统计</h4>
+                    <canvas id="chart-step-4-like" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
+                </div>
+                <div class="col-lg-6" style="height: 400px">
+                    <h4 style="text-align: center">心控-是否有经验</h4>
+                    <canvas id="chart-step-4-try" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
+                </div>
+                <div class="col-lg-6" style="height: 400px">
+                    <h4 style="text-align: center">其他-喜好程度统计</h4>
+                    <canvas id="chart-step-5-like" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
+                </div>
+                <div class="col-lg-6" style="height: 400px">
+                    <h4 style="text-align: center">其他-是否有经验</h4>
+                    <canvas id="chart-step-5-try" style="position: absolute;left: calc(50% - 140px) ; height: 280px; width: 280px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+
+    var step = {
+        "1":[
+            "强奸","轮奸","舔肛","舔阴","吞精","深喉","口交","拳交","颜射","内射","寸止","龟头责","后穴插入","双穴插入","尿道插入","异物插入","贞操控制","器具折磨","控制高潮","毁灭高潮","强制高潮","指令自慰","扩张后穴","扩张尿道","阳具玩弄","高潮失禁","强行榨精","前列腺高潮",
+            "角色扮演","制服","剃毛","胶衣","放置","舌钉","乳环","阴环","鼻环","肛塞","阳具环","贞操锁","体环牵引","家具Play","容器Play",
+            "耳光","藤条","紧缚","吊缚","冰块","电击","乳夹","拘束","窒息","针刺","穿孔","体罚","滴蜡","火刑","水刑","恋痛","口塞","口枷","鼻钩","轻鞭打","重鞭打","乳头坠物","阴囊坠物","龟头坠物","呼吸控制","睾丸击打","睾丸挤压","踩头","踩胸","踩阴","导尿","灌肠","刑具"
+        ],
+        "2":[
+            "项圈","手铐","脚镣","尾巴","爬行","喂食","舔鞋","舔袜","舔脚","踩踏","牵引","狗叫","猫叫","遛弯","叼鞋子","囚禁","饲养"
+        ],
+        "3":[
+            "淫纹","纹身","淫语纹身","窗台露出","野外放置","户外露出","人群露出","野外自慰","外出调教","网络调教","性交暴露","捆绑外出","贞操锁外出","性玩具外出","淫语外出"
+        ],
+        "4":[
+            "普通女装","暴露女装","黑丝","白丝","高跟鞋","女性内衣","伪声","娇喘","义乳","假阴",
+            "洗脑","恋物","监视","言语羞辱","人格侮辱","远程控制","阳具崇拜","思想控制","网络控制"
+        ],
+        "5":[
+            "一主多奴","一奴多主","网络公调","长期圈养","短期圈养","奴下奴"
+        ]
+    };
+
+    var pageData = {};
+
+    var UserChoose = {};
+
+    var needWarning = false;
+
+    if (localStorage.getItem("UserChoose") !== undefined && localStorage.getItem("UserChoose") !== null) {
+        UserChoose = JSON.parse(localStorage.getItem("UserChoose"));
+    }
+
+    initUserChoose();
+
+    function initUserChoose() {
+        if (Object.keys(UserChoose).length === 0){
+            for (let i = 1;i <= Object.keys(step).length;i++) {
+                UserChoose[i] = {"like":{},"try":{}};
+                for (let j = 1 ; j <= step[i].length ; j++) {
+                    UserChoose[i]["like"][j] = '0';
+                    UserChoose[i]["try"][j] = '0';
+                }
+            }
+        }
+    }
+
+    function alertWindows(type, title, message, okBtnMsg, noBtnMsg, okBtnFun, noBtnFun) {
+        if (type === null || type === undefined) type = 'info';
+        if (title === null || title === undefined) {
+            switch (type) {
+                case 'info':
+                    title = '提示';break;
+                case 'warning':
+                    title = '警告';break;
+                case 'success':
+                    title = '成功';break;
+                case 'danger':
+                    title = '危险';break;
+                case 'error':
+                    title = '错误';break;
+                default:
+                    title = '信息';
+
+            }
+        }
+        if (message === null || message === undefined) message = '';
+        if (okBtnMsg === null || okBtnMsg === undefined) okBtnMsg = '确定';
+        let btnClass;
+        let typeColor;
+        switch (type) {
+            case 'info':
+                btnClass = 'btn-info';typeColor = 'blue';break;
+            case 'warning':
+                btnClass = 'btn-warning';typeColor = 'orange';break;
+            case 'success':
+                btnClass = 'btn-success';typeColor = 'green';break;
+            case 'danger':
+            case 'error':
+                btnClass = 'btn-danger';typeColor = 'red';break;
+            default:
+                btnClass = 'btn-primary';typeColor = 'dark';
+
+        }
+        let buttons = {};
+        buttons.ok = {
+            text : okBtnMsg,
+            btnClass: btnClass,
+            action : okBtnFun
+        };
+        if (noBtnMsg !== null && noBtnMsg !== undefined) {
+            buttons.no = {
+                text : noBtnMsg,
+                action : noBtnFun
+            }
+        }
+        $.confirm({
+            title : title,
+            content : message,
+            type: typeColor,
+            typeAnimated: true,
+            buttons:buttons
+        });
+    }
+
+
+    function warningAlert(title,message,okBtnMsg,noBtnMsg,okBtnFun,noBtnFun){
+        alertWindows('warning', title, message, okBtnMsg, noBtnMsg, okBtnFun, noBtnFun);
+    }
+
+    function dangerAlert(title,message,okBtnMsg,noBtnMsg,okBtnFun,noBtnFun){
+        alertWindows('danger', title, message, okBtnMsg, noBtnMsg, okBtnFun, noBtnFun);
+    }
+
+    function drawTable(table,pagination,data,page) {
+        if (page === null || page === undefined) page = 1;
+        let maxIndex = page*10;
+        let minIndex = page*10-9;
+        let dataHtml = '';
+        for (let i = 1 ; i <= data.length ; i++){
+            if (i < minIndex) continue;
+            if (i > maxIndex) break;
+            dataHtml += "<tr>";
+            dataHtml += "<td>"+data[i-1]+"</td>";
+            dataHtml += "<td><select class=\"form-control\" id=\""+table+"-"+i+"-like"+"\" size=\"1\" onchange='saveChoose(\"like\",\""+table+"-"+i+"\")'>\n" +
+                "<option value=\"0\">绝对不行</option>\n" +
+                "<option value=\"1\">不确定、没试过</option>\n" +
+                "<option value=\"2\">不喜欢但是偶尔可以试试</option>\n" +
+                "<option value=\"3\">能接受</option>\n" +
+                "<option value=\"4\">喜欢</option>\n" +
+                "<option value=\"5\">超级喜欢</option>\n" +
+                "<option value=\"-1\">不适用</option>\n" +
+                "</select></td>";
+            dataHtml += "<td><select class=\"form-control\" id=\""+table+"-"+i+"-try"+"\" size=\"1\" onchange='saveChoose(\"try\",\""+table+"-"+i+"\")'>\n" +
+                "<option value=\"0\">否</option>\n" +
+                "<option value=\"1\">是</option>\n" +
+                "</select></td></tr>";
+        }
+        //
+        let paginationHtml;
+
+        if (page === 1){
+            paginationHtml = '<li class="disabled"><span>«</span></li>';
+        }else {
+            paginationHtml = '<li onclick="addPage(\''+table+'\',\''+pagination+'\',-1)"><span>«</span></li>';
+        }
+        let maxPage = parseInt(data.length/10+1);
+        let lOmit = undefined;
+        let ROmit = undefined;
+        for(let k = 1 ; k <= maxPage ; k++){
+            if (maxPage > 5){
+                let n = (k - page);
+                let rSize = parseInt(maxPage - page);
+                let lSize = page - 1;
+                if (n < rSize && n > 1){
+                    if (ROmit === undefined) {
+                        ROmit = true;
+                        paginationHtml += '<li><span>...</span></li>';
+                    }
+                    continue;
+                }
+                if (n > -lSize && n < -1) {
+                    if (lOmit === undefined){
+                        lOmit = true;
+                        paginationHtml += '<li><span>...</span></li>';
+                    }
+                    continue;
+                }
+            }
+            if (k === page){
+                paginationHtml += '<li class="active" onclick="changePage(\''+table+'\',\''+pagination+'\','+k+')"><span>'+k+'</span></li>';
+            }else {
+                paginationHtml += '<li onclick="changePage(\''+table+'\',\''+pagination+'\','+k+')"><span>'+k+'</span></li>';
+            }
+        }
+        if (page === parseInt(data.length/10+1)){
+            paginationHtml += '<li class="disabled"><span>»</span></li>';
+        }else {
+            paginationHtml += '<li onclick="addPage(\''+table+'\',\''+pagination+'\',1)"><span>»</span></li>';
+        }
+        $('#'+pagination).html(paginationHtml);
+        $('#'+table).html(dataHtml);
+        //设置数据
+
+        for (let i = minIndex; i <= maxIndex ; i++){
+            let stepNum = table.substring(table.indexOf("-")+1,table.lastIndexOf("-"));
+            if (UserChoose === null || UserChoose === undefined) {
+                UserChoose = {};
+                break;
+            }
+            if (UserChoose[stepNum] === undefined) break;
+            if (UserChoose[stepNum]["like"] !== undefined && UserChoose[stepNum]["like"] !== null){
+                if (UserChoose[stepNum]["like"][i] !== undefined && UserChoose[stepNum]["like"][i] !== null)
+                $('#'+table+"-"+i+"-like").find("option[value='"+UserChoose[stepNum]["like"][i]+"']").attr("selected", true);
+            }
+            if (UserChoose[stepNum]["try"] !== undefined && UserChoose[stepNum]["try"] !== null){
+                if (UserChoose[stepNum]["try"][i] !== undefined && UserChoose[stepNum]["try"][i] !== null)
+                $('#'+table+"-"+i+"-try").find("option[value='"+UserChoose[stepNum]["try"][i]+"']").attr("selected", true);
+            }
+        }
+    }
+
+    function getTextWidth(str, fontSize) {
+        let result = 0;
+        let ele = document.createElement("div");
+        ele.style.position = "absolute";
+        ele.style.whiteSpace = "nowrap";
+        ele.style.fontSize = fontSize;
+        ele.style.opacity = 0;
+        ele.innerText = str;
+        document.body.append(ele);
+        result = ele.getBoundingClientRect().width;
+        document.body.removeChild(ele);
+        return result;
+    }
+
+    function saveChoose(type, id) {
+        let choose = $("#"+id+"-"+type).val();
+        let stepNum = id.substring(id.indexOf("-")+1,id.lastIndexOf("-"));
+            stepNum = stepNum.substring(0,stepNum.lastIndexOf("-"));
+        let chooseNum = id.substring(id.lastIndexOf("-")+1);
+        if (UserChoose[stepNum] === undefined) UserChoose[stepNum] = {"like":{},"try":{}};
+        UserChoose[stepNum][type][chooseNum] = choose;
+        localStorage.setItem("UserChoose",JSON.stringify(UserChoose));
+    }
+
+    function addPage(table, pagination, page) {
+        if (page === null || page === undefined) return;
+        if (pageData[table] === undefined) pageData[table] = 1;
+        pageData[table] += page;
+        changePage(table,pagination,pageData[table]);
+    }
+
+    function changePage(table, pagination, page){
+        pageData[table] = page;
+        drawTable(table,pagination,step[table.substring(table.indexOf("-")+1,table.lastIndexOf("-"))],pageData[table]);
+    }
+
+    function initWindow() {
+        $('form').attr("style","display:block");
+        $('#btn-group').attr("style","display:block");
+        $('#result-Canvas').attr("style","display:none");
+        drawTable('step-1-table','step-1-pagination',step["1"]);
+        drawTable('step-2-table','step-2-pagination',step["2"]);
+        drawTable('step-3-table','step-3-pagination',step["3"]);
+        drawTable('step-4-table','step-4-pagination',step["4"]);
+        drawTable('step-5-table','step-5-pagination',step["5"]);
+    }
+
+    function clearAllChoose() {
+        dangerAlert(
+            "提示",
+            "你真的要重置吗？这将会重置整个自测表的选项以及清除你设备上的历史选项。",
+            "重置",
+            "取消",
+            function () {
+                UserChoose = {};
+                localStorage.clear();
+                initWindow();
+            }
+        )
+    }
+
+    function firstWarning(){
+        warningAlert(
+            "#NSFW警告",
+            "该测试可能包含一些不适宜工作或学习时间进行的内容，并可能出现较为重口的内容，请确认<b>您已经成年</b>且<b>周边环境足够安全</b>。",
+            "确定",
+            "关闭页面",
+            function(){
+                warningAlert(
+                    "#自测表适应性警告",
+                    "该测试部分内容可能仅适用于部分特殊人群,且完成该自测表所需时间较长。",
+                    "确定",
+                    undefined,
+                    function () {
+                        warningAlert(
+                            "#健康警告",
+                            "该测试内容具有不利于健康或者具有损伤身体乃至具有生理性死亡、社会性死亡风险、法律风险的玩法、<b>并不推荐此类玩法</b>。<br/>请大家珍爱生命，控制性癖，不要做被性癖支配的物品。",
+                            "好",
+                            undefined,
+                            function () {
+                                initWindow()
+                            }
+                        )
+                    }
+                )
+            },
+            function () {
+                window.close();
+            }
+        );
+    }
+
+    // if (needWarning) firstWarning();
+    // else initWindow();
+
+    function returnCheck() {
+        initWindow();
+        $(document).scrollTop(0);
+    }
+
+    function likeChooseNum(like) {
+        let like0Nmu = 0;
+        let like1Nmu = 0;
+        let like2Nmu = 0;
+        let like3Nmu = 0;
+        let like4Nmu = 0;
+        let like5Nmu = 0;
+        let like6Nmu = 0;
+
+        let keys = Object.keys(like);
+        for (let i = 0 ; i < keys.length ; i ++) {
+            switch (like[keys[i]]) {
+                case "-1":
+                    like6Nmu++;break;
+                case "0":
+                    like0Nmu++;break;
+                case "1":
+                    like1Nmu++;break;
+                case "2":
+                    like2Nmu++;break;
+                case "3":
+                    like3Nmu++;break;
+                case "4":
+                    like4Nmu++;break;
+                case "5":
+                    like5Nmu++;break;
+            }
+        }
+        return [like0Nmu,like1Nmu,like2Nmu,like3Nmu,like4Nmu,like5Nmu,like6Nmu];
+    }
+
+    function tryChooseNum(tryChoose) {
+        let try0Num = 0;
+        let try1Num = 0;
+        let keys = Object.keys(tryChoose);
+        for (let i = 0 ; i < keys.length ; i ++) {
+            switch (tryChoose[keys[i]]) {
+                case "0":
+                    try0Num++;break;
+                case "1":
+                    try1Num++;break;
+            }
+
+        }
+        return[try1Num,try0Num]
+    }
+
+    function drawChart(id, data,type) {
+        let labels = ["绝对不行", "不确定、没试过", "不喜欢，但偶尔可以试试","能接受","喜欢","超级喜欢","不适用"];
+        let backgroundColor = ['#d9534f','#ffaa00','#aaffff','#aaaa7f', '#ffaaff' ,'#ff55ff' ,'#465161'];
+        if (type === 'try') {
+            labels = ["是","否"];
+            backgroundColor = ['#ffaa00','#aaffff'];
+        }
+        new Chart($("#"+id), {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: backgroundColor
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position:'left',
+                        align:'start'
+                    }
+                }
+            }
+        });
+    }
+
+    function createResult() {
+        $('form').attr("style", "display:none");
+        $('#btn-group').attr("style", "display:none");
+        $('#result-Canvas').attr("style", "display:block");
+        $(document).scrollTop(0);
+
+        //chart-step-1-like
+        drawChart("chart-step-1-like",likeChooseNum(UserChoose[1]["like"]));
+        drawChart("chart-step-2-like",likeChooseNum(UserChoose[2]["like"]));
+        drawChart("chart-step-3-like",likeChooseNum(UserChoose[3]["like"]));
+        drawChart("chart-step-4-like",likeChooseNum(UserChoose[4]["like"]));
+        drawChart("chart-step-5-like",likeChooseNum(UserChoose[5]["like"]));
+
+        drawChart("chart-step-1-try",tryChooseNum(UserChoose[1]["try"]),"try");
+        drawChart("chart-step-2-try",tryChooseNum(UserChoose[2]["try"]),"try");
+        drawChart("chart-step-3-try",tryChooseNum(UserChoose[3]["try"]),"try");
+        drawChart("chart-step-4-try",tryChooseNum(UserChoose[4]["try"]),"try");
+        drawChart("chart-step-5-try",tryChooseNum(UserChoose[5]["try"]),"try");
+
+    }
+
+    createResult();
+
+    function createResultImage() {
+        domtoimage.toJpeg(document.getElementById('result'), { quality: 1 ,bgcolor:"white" })
+            .then(function (dataUrl) {
+                let link = document.createElement('a');
+                link.download = 'm-degree-result.jpg';
+                link.href = dataUrl;
+                link.click();
+            });
+    }
+
+    // $.confirm({
+    //     title: '#NSFW警告',
+    //     content: '该测试内可能包含',
+    //     type: 'orange',
+    //     typeAnimated: true,
+    //     buttons: {
+    //         ok: {
+    //             text: '接受',
+    //             btnClass: 'btn-warning',
+    //             action: function(){
+    //             }
+    //         },
+    //         close: {
+    //             text: '关闭测试页面',
+    //             action: function(){
+    //                 window.close();
+    //             }
+    //         }
+    //     }
+    // });
+</script>
+</html>
