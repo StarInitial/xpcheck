@@ -10,9 +10,9 @@
     <script src="inky-list.js"></script>
 </head>
 <body>
-<div class="card" style="min-height: 70%">
+<div class="card" style="min-height: 100%">
     <div class="card-header">
-        <h1>深渊凝视着你 | 测试列表</h1>
+        <h1>深渊凝视着你</h1>
     </div>
     <div class="card-body">
         <div class="form-inline">
@@ -48,6 +48,16 @@
         <p style="color: #33cabb;">* 单击测试名称跳转到测试</p>
     </div>
 </div>
+<div class="card" style="min-height: 400px">
+    <div class="card-header">
+        <h4>统计</h4>
+    </div>
+    <div class="card-body">
+        <div class="col-xs-12">
+            <canvas id="chart-online" style="position: absolute;left: calc(50% - 140px) ;display: inline; height: 280px; width: 280px;"></canvas>
+        </div>
+    </div>
+</div>
 <div id="gitalk-container" class="container"></div>
 </body>
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
@@ -62,9 +72,49 @@
     var thisPage = 1;
 
     updateTable();
+    updateChart();
     $("#search-text").on("input propertychange",function(){
        updateTable($("#search-text").val(),thisPage)
     });
+
+    function updateChart() {
+        //测试在线情况
+        let onlineNum = 0;
+        let inlTestNum = 0;
+        let testNum = 0;
+        let offLineNum = 0;
+        let unknownNum = 0;
+
+        for(let i = 0 ; i < InkyList["inky-text-list"].length; i++) {
+            switch (InkyList["inky-text-list"][i]["status"]) {
+                case "OK":
+                    onlineNum ++;break;
+                case "IN-TEST":
+                    inlTestNum++;break;
+                case "TEST":
+                    testNum++;break;
+                case "DWON":
+                    offLineNum++;break;
+                default:
+                    unknownNum++;
+            }
+        }
+
+        new Chart($("#chart-online"), {
+            type: 'doughnut',
+            data: {
+                labels: ["正常","内部测试","测试", "停止服务", "未知"],
+                datasets: [{
+                    data: [onlineNum,inlTestNum,testNum, offLineNum, unknownNum],
+                    backgroundColor: ['#5cb85c','#f0ad4e' ,'#f96197', '#d9534f', '#465161']
+                }]
+            },
+            options: {
+                responsive: false
+            }
+        });
+
+    }
 
     function updateTable(keyword,page) {
         let table = '';
@@ -84,7 +134,10 @@
             }
 
             table += '<tr><td>'+InkyList["inky-text-list"][i]["id"]+'</td>';
-            if (InkyList["inky-text-list"][i]["status"] === "DOWN") {
+            if (
+                InkyList["inky-text-list"][i]["status"] === "DOWN" ||
+                InkyList["inky-text-list"][i]["status"] === "IN-TEST"
+            ) {
                 table +='<td>'+InkyList["inky-text-list"][i]["name"]+'</td>\n';
             }else {
                 table += '<td><a href="'+InkyList["inky-text-list"][i]["url"]+'">'+InkyList["inky-text-list"][i]["name"]+'</a></td>\n';
@@ -93,13 +146,18 @@
             table += '<td><div class="progress progress-striped progress-sm">\n' +
                 '<div class="progress-bar progress-bar-info" style="width: '+InkyList["inky-text-list"][i]["time"]+'%;"></div>\n' +
                 '</div></td>';
-
-            if (InkyList["inky-text-list"][i]["status"] === "OK")
-                table += '<td><span class="label label-success">正常</span></td>';
-            else if (InkyList["inky-text-list"][i]["status"] === "DOWN")
-                table += '<td><span class="label label-danger">停止服务</span></td>';
-            else
-                table += '<td><span class="label label-dark">未知</span></td>';
+            switch (InkyList["inky-text-list"][i]["status"]) {
+                case "OK":
+                    table += '<td><span class="label label-success">正常</span></td>';break;
+                case "IN-TEST":
+                    table += '<td><span class="label label-warning">内部测试</span></td>';break;
+                case "TEST":
+                    table += '<td><span class="label label-pink">公开测试</span></td>';break;
+                case "DWON":
+                    table += '<td><span class="label label-danger">停止服务</span></td>';break;
+                default:
+                    table += '<td><span class="label label-dark">未知</span></td>';
+            }
             let authorSize = 0;
             table += "<td>";
             let authorColorList = ['label-warning','label-danger','label-success','label-info'];

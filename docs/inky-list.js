@@ -23,8 +23,8 @@ var InkyList = {
             "url":"M-Degree",
             "name":"M属性自测表",
             "update":"未知",
-            "status":"DOWN",
-            "time":40,
+            "status":"IN-TEST",
+            "time":50,
             "author":[
                 {
                     "name":"Ahgu"
