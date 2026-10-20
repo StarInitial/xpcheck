@@ -11,14 +11,34 @@
 (function() {
     'use strict';
 
-    const colors = {
+    // 妈妈，CSS class不能用中文啊
+    const transcript = {
+        喜欢: 'prefer',
+        接受: 'accept',
+        不接受: 'reject',
+        无所谓: 'neutral',
+    };
+    const oldColors = {
         喜欢: '#f15390',
         接受: '#b8f1cc',
         不接受: '#ff8444',
         无所谓: '#f1f1b8',
     };
+    // rcartocolor - Temps
+    const colors = {
+        喜欢: '#009392',
+        接受: '#9CCB86',
+        不接受: '#CF597E',
+        无所谓: '#E9E29C',
+    };
     let keywords = [];
 
+    const styles = [`.sum { margin: 5px; padding: 4px 8px; border-radius: 5px; color: black; }`];
+    for (const key in colors) {
+        styles.push(`.sum.${transcript[key]} { background: ${colors[key]}; }`);
+        styles.push(`.sum.old${transcript[key]} { background: ${oldColors[key]}; }`);
+    }
+    $('#story').append(createElement('style', { textContent: styles.join('\n'), attr_id: 'summary-styles' }));
     const observer = new MutationObserver(mutations => {
         for (const mutation of mutations) {
             if (mutation.target.textContent.includes('总分')) {
@@ -28,6 +48,7 @@
                 printTable('人类级', 0, 23);
                 printTable('猛兽级', 23, 22);
                 printTable('异形级', 45, 20);
+                printLegend();
                 break;
             }
         }
@@ -39,32 +60,48 @@
         for (let i = start; i < start + length; i++) {
             elements.push(createElement('div', {
                 textContent: keywords[i].textContent.trim().replace(/"/g, ''),
-                styles: {
-                    margin: '5px',
-                    padding: '4px 8px',
-                    background: colors[keywords[i].parentNode.nextSibling.textContent.trim()],
-                    borderRadius: '5px',
-                },
+                classList: ['sum', transcript[keywords[i].parentNode.nextSibling.textContent.trim()]],
             }));
         }
         $('#story').append(
-            createElement('div', {
-                textContent: title,
-                styles: {
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                },
-            }),
-            createElement('div', {
-                styles: {
-                    display: 'flex',
-                    maxWidth: '600px',
-                    margin: '10px',
-                    flexWrap: 'wrap',
-                },
-                children: elements,
-            }),
+            _makeHeading(title),
+            _makeFlex(elements)
         );
+    }
+    function _makeHeading(title) {
+        return createElement('div', {
+            textContent: title,
+            styles: {
+                textAlign: 'center',
+                fontWeight: 'bold',
+            },
+        })
+    }
+    function _makeFlex(elements) {
+        return createElement('div', {
+            styles: {
+                display: 'flex',
+                maxWidth: '600px',
+                margin: '10px',
+                flexWrap: 'wrap',
+            },
+            children: elements,
+        })
+    }
+    function printLegend() {
+        const elements = [];
+        const oldElements = [];
+        for (const key in colors) {
+            elements.push(createElement('div', {
+                textContent: key,
+                classList: ['sum', transcript[key]],
+            }));
+            oldElements.push(createElement('div', {
+                textContent: key,
+                classList: ['sum', 'old' + transcript[key]],
+            }));
+        }
+        $('#story').append(_makeHeading('图例'), _makeFlex(elements), _makeHeading('旧图例（用于判读旧版截图）'), _makeFlex(oldElements));
     }
 
     function $(selector) {
